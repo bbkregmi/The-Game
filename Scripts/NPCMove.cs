@@ -26,6 +26,8 @@ public class NPCMove : TacticsMove
             {
                 attacking = false;
                 AttackEnemy(target.GetComponent<TacticsMove>());
+                targets = null;
+                target = null;
                 NewTurnManager.EndTurn(this);
             }
         }
@@ -95,8 +97,7 @@ public class NPCMove : TacticsMove
     {
         if (left < right)
         {
-            int middle = left + (right - 1) / 2;
-
+            int middle = left + (right - left) / 2;
             DoMergeSort(targetsArr, left, middle);
             DoMergeSort(targetsArr, middle + 1, right);
             Merge(targetsArr, left, middle, right);
@@ -282,9 +283,11 @@ public class NPCMove : TacticsMove
         }
 
         //TO DO: No path to any targets
+        /**
         else
         {
             NewTurnManager.EndTurn(this);
         }
+    */
     }
 }

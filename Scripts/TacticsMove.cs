@@ -368,14 +368,18 @@ public class TacticsMove : MonoBehaviour
     {
 
         BasePlayer enemy = attackedEnemy.GetComponent<ClassInfo>().player;
+
+        /**
         BasePlayer hero = this.GetComponent<ClassInfo>().player;
         int damageDone =Mathf.Max(1, hero.PlayerAttack - enemy.PlayerDefense);
         enemy.PlayerHealth = Mathf.Max(0,enemy.PlayerHealth - damageDone);
+        */
 
+        enemy.PlayerHealth = 0;
         if (enemy.PlayerHealth <= 0)
         {
             BattleManager.KillUnit(attackedEnemy);
-            Destroy(attackedEnemy.gameObject);
+            DestroyImmediate(attackedEnemy.gameObject);
         }
 
         hasAttacked = true;

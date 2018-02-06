@@ -53,7 +53,7 @@ public class BattleManager : MonoBehaviour {
         else if (unit.tag.Equals(Tag.NPC))
         {
             enemies.Remove(unit);
-            PlayerVictory();
+            //PlayerVictory();
         }
 
     }
