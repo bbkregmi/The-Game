@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NPCMove : TacticsMove
 {
-
+    GameObject[] targets;
     GameObject target;
 
     // Use this for initialization
@@ -79,27 +79,90 @@ public class NPCMove : TacticsMove
     {
         Tile targetTile = GetTargetTile(target);
 
-        FindPath(targetTile);
+        FindPath(targetTile, 0);
     }
 
     //Get closest target player
     void FindNearestTarget()
     {
-        GameObject[] targets = GameObject.FindGameObjectsWithTag(Tag.PLAYER);
+        targets = GameObject.FindGameObjectsWithTag(Tag.PLAYER);
+        DoMergeSort(targets, 0, targets.Length - 1);
+        target = targets[0]; ;
+    }
 
-        GameObject nearest = null;
-        float distance = Mathf.Infinity;
-
-        foreach (GameObject obj in targets)
+    //Sorts our list of targets from closest to furthest
+    private void DoMergeSort(GameObject[] targetsArr, int left, int right)
+    {
+        if (left < right)
         {
-            float d = Vector3.Distance(transform.position, obj.transform.position);
-            if (d < distance)
-            {
-                distance = d;
-                nearest = obj;
-            }
+            int middle = left + (right - 1) / 2;
+
+            DoMergeSort(targetsArr, left, middle);
+            DoMergeSort(targetsArr, middle + 1, right);
+            Merge(targetsArr, left, middle, right);
         }
-        target = nearest;
+    }
+
+    private void Merge(GameObject[] array, int left, int middle, int right)
+    {
+        int i, j, k;
+        int sizeLeft = middle - left + 1;
+        int sizeRight = right - middle;
+
+        //Create temporary arrays
+        GameObject[] tempRight = new GameObject[sizeRight];
+        GameObject[] tempLeft = new GameObject[sizeLeft];
+
+        //Copy data into temp arrays
+        for (i = 0; i < sizeLeft; i++)
+        {
+            tempLeft[i] = array[left + i];
+        }
+
+        for (j = 0; j < sizeRight; j++)
+        {
+            tempRight[j] = array[middle + 1 + j];
+        }
+
+        //Merge Temp Arrays back
+        i = 0; 
+        j = 0;
+        k = left;
+        float distanceLeft;
+        float distanceRight;
+        while (i < sizeLeft && j < sizeRight)
+        {
+            distanceLeft = Vector3.Distance(transform.position, tempLeft[i].transform.position);
+            distanceRight = Vector3.Distance(transform.position, tempRight[j].transform.position);
+            if (distanceLeft <= distanceRight)
+            {
+                array[k] = tempLeft[i];
+                i++;
+            }
+            else
+            {
+                array[k] = tempRight[j];
+                j++;
+            }
+
+            k++;
+        }
+
+        //Copy remaining elements of Left if there are any
+        while (i < sizeLeft)
+        {
+            array[k] = tempLeft[i];
+            i++;
+            k++;
+        }
+
+        //Copy remaining elements of Right if there are any
+        while (j < sizeRight)
+        {
+            array[k] = tempRight[j];
+            j++;
+            k++;
+        }
     }
 
     protected Tile FindLowestF(List<Tile> list)
@@ -143,7 +206,7 @@ public class NPCMove : TacticsMove
         return endTile;
     }
 
-    protected void FindPath(Tile target)
+    protected void FindPath(Tile target, int targetCounter)
     {
         ComputeAdjacencyList(jumpHeight, target);
         Tile currentTile = GetCurrentTile();
@@ -172,7 +235,7 @@ public class NPCMove : TacticsMove
 
             foreach (Tile tile in t.adjacencyList)
             {
-                
+
                 if (closedList.Contains(tile))
                 {
                     //Do Nothing, already processed
@@ -205,8 +268,23 @@ public class NPCMove : TacticsMove
 
                     openList.Add(tile);
                 }
-                
+
             }
+        }
+
+        //TO DO: Path Blocked, or No Path
+        //Write the code here 
+        targetCounter++;
+        if (targetCounter < targets.Length)
+        {
+            target = GetTargetTile(targets[targetCounter]);
+            FindPath(target, targetCounter);
+        }
+
+        //TO DO: No path to any targets
+        else
+        {
+            NewTurnManager.EndTurn(this);
         }
     }
 }

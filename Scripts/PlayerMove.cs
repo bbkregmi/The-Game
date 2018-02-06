@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMove : TacticsMove {
+public class PlayerMove : TacticsMove
+{
 
     ClassInfo classinfo;
     TacticsMove enemy;
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         Init();
         classinfo = gameObject.GetComponent<ClassInfo>();
@@ -16,9 +17,9 @@ public class PlayerMove : TacticsMove {
         {
         }
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update()
     {
         //It's not the player's turn
         if (!turn)
@@ -67,7 +68,7 @@ public class PlayerMove : TacticsMove {
         {
             CheckMouse();
         }
-	}
+    }
 
 
     void CheckMouse()
@@ -82,7 +83,7 @@ public class PlayerMove : TacticsMove {
             //Mouse was clicked on an object with a collider
             if (Physics.Raycast(ray, out hit))
             {
-                
+
                 //A tile was clicked on
                 if (hit.collider.tag == "Tile")
                 {
@@ -119,7 +120,7 @@ public class PlayerMove : TacticsMove {
                 else if (hit.collider.tag == "Player")
                 {
                     TacticsMove player = hit.collider.GetComponent<TacticsMove>();
-                    if(!player.hasMoved || !player.hasAttacked)
+                    if (!player.hasMoved || !player.hasAttacked)
                     {
                         RemoveSelectableTiles();
                         RemoveAttackableTiles();
@@ -155,7 +156,7 @@ public class PlayerMove : TacticsMove {
         RemoveAttackableTiles();
     }
 
- 
+
 
     void OnGUI()
     {
@@ -173,7 +174,7 @@ public class PlayerMove : TacticsMove {
                     OnAttackCancelClicked();
                 }
             }
-            else if (moving|| attacking)
+            else if (moving || attacking)
             {
                 //Don't show anything
             }
