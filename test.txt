@@ -1,2 +1,2 @@
- nice
+ stupid error
  Test for git tutorial
