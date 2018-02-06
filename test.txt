@@ -1,1 +1,2 @@
-Test for git tutorial
+ nice
+ Test for git tutorial
