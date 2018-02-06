@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tile : MonoBehaviour
-{
+public class Tile : MonoBehaviour {
 
     public bool walkable = true;
     public bool current = false;
@@ -28,16 +27,16 @@ public class Tile : MonoBehaviour
     //From process to destination
     public float hCost = 0;
 
-    // Use this for initialization
-    void Start()
+	// Use this for initialization
+	void Start ()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
+	    	
+	}
+	
+	// Update is called once per frame
+	void Update ()
     {
-        if (current)
+	    if (current)
         {
             GetComponent<Renderer>().material.color = Color.blue;
         }
@@ -57,7 +56,7 @@ public class Tile : MonoBehaviour
         {
             GetComponent<Renderer>().material.color = Color.white;
         }
-    }
+	}
 
     public void Reset()
     {
@@ -85,7 +84,7 @@ public class Tile : MonoBehaviour
 
     public void CheckTile(Vector3 direction, float jumpHeight, Tile target)
     {
-        Vector3 halfExtents = new Vector3(0.25f, (1 + jumpHeight) / 2, 0.25f);
+        Vector3 halfExtents = new Vector3(0.25f, (1 + jumpHeight)/2, 0.25f);
         Collider[] colliders = Physics.OverlapBox(transform.position + direction,
             halfExtents);
 

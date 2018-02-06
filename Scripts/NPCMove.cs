@@ -172,7 +172,7 @@ public class NPCMove : TacticsMove
 
             foreach (Tile tile in t.adjacencyList)
             {
-
+                
                 if (closedList.Contains(tile))
                 {
                     //Do Nothing, already processed
@@ -205,7 +205,7 @@ public class NPCMove : TacticsMove
 
                     openList.Add(tile);
                 }
-
+                
             }
         }
     }

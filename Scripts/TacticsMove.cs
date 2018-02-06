@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TacticsMove : MonoBehaviour
-{
+public class TacticsMove : MonoBehaviour {
 
     public bool turn = false;
     public bool hasMoved = false;
@@ -12,7 +11,7 @@ public class TacticsMove : MonoBehaviour
     public bool moving = false;
     public bool attacking = false;
     public Animator anim;
-
+   
 
     List<Tile> selectableTiles = new List<Tile>();
     List<Tile> attackableTiles = new List<Tile>();
@@ -139,15 +138,18 @@ public class TacticsMove : MonoBehaviour
         {
             Tile t = process.Dequeue();
 
-            selectableTiles.Add(t);
-            t.selectable = true;
+            //If no units occupy a possible target tile
+            if (t.GetUnitOnTile() == null)
+            {
+                selectableTiles.Add(t);
+                t.selectable = true;
+            }
 
             if (t.distance < distance)
             {
                 foreach (Tile tile in t.adjacencyList)
                 {
-                    if (!tile.visited && ((tile.GetUnitOnTile() == null) ||
-                        tile.GetUnitOnTile().tag.Equals(this.tag)))
+                    if (!tile.visited)
                     {
                         tile.parent = t;
                         tile.visited = true;
@@ -186,11 +188,11 @@ public class TacticsMove : MonoBehaviour
             Vector3 target = t.transform.position;
 
             //Calculate the unit's position on top of target tile
-            target.y = 0.1f + t.GetComponent<Collider>().bounds.extents.y;
+            target.y =  0.1f + t.GetComponent<Collider>().bounds.extents.y;
 
             if (Vector3.Distance(transform.position, target) >= 0.05f)
             {
-
+                
                 bool jump = transform.position.y != target.y;
                 if (jump)
                 {
@@ -206,8 +208,8 @@ public class TacticsMove : MonoBehaviour
                     movingEdge = false;
                 }
 
-                transform.forward = heading;
-                transform.position += velocity * Time.deltaTime * 2;
+                 transform.forward = heading;
+                transform.position += velocity * Time.deltaTime;
             }
             else
             {
@@ -366,9 +368,8 @@ public class TacticsMove : MonoBehaviour
     {
 
         BasePlayer enemy = attackedEnemy.GetComponent<ClassInfo>().player;
-        BasePlayer hero = this.GetComponent<ClassInfo>().player;
-        int damageDone =Mathf.Max(1, hero.PlayerAttack - enemy.PlayerDefense);
-        enemy.PlayerHealth = Mathf.Max(0,enemy.PlayerHealth - damageDone);
+
+        enemy.PlayerHealth = Mathf.Max(0, enemy.PlayerHealth - 1);
 
         if (enemy.PlayerHealth <= 0)
         {
