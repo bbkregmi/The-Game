@@ -139,9 +139,11 @@ public class TacticsMove : MonoBehaviour
         {
             Tile t = process.Dequeue();
 
-            selectableTiles.Add(t);
-            t.selectable = true;
-
+            if (t.GetUnitOnTile() == null || t.GetUnitOnTile().Equals(this))
+            {
+                selectableTiles.Add(t);
+                t.selectable = true;
+            }
             if (t.distance < distance)
             {
                 foreach (Tile tile in t.adjacencyList)
@@ -207,7 +209,7 @@ public class TacticsMove : MonoBehaviour
                 }
 
                 transform.forward = heading;
-                transform.position += velocity * Time.deltaTime * 2;
+                transform.position += velocity * Time.deltaTime * 1.5f;
             }
             else
             {

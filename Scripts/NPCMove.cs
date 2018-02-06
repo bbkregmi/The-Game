@@ -87,7 +87,7 @@ public class NPCMove : TacticsMove
     {
         targets = GameObject.FindGameObjectsWithTag(Tag.PLAYER);
         DoMergeSort(targets, 0, targets.Length - 1);
-        target = targets[0]; ;
+        target = targets[0]; 
     }
 
     //Sorts our list of targets from closest to furthest
